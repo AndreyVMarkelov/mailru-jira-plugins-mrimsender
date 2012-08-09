@@ -1,0 +1,46 @@
+## Created by Andrey Markelov 29-08-2012.
+## Copyright Mail.Ru Group 2012. All rights reserved.
+#if($isCreated)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.created" ,$summary) [ $issueLink ]
+#if($!description != "") ${n}$description #end
+#elseif($isCommented)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.commented" ,$summary) [ $issueLink ]
+#elseif($isReopened)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.reopened" ,$summary) [ $issueLink ]
+#elseif($isUpdated)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.updated" ,$summary) [ $issueLink ]
+#elseif($isClosed)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.closed" ,$summary) [ $issueLink ]
+#elseif($isDeleted)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.deleted" ,$summary) [ $issueLink ]
+#elseif($isAssigned)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.reassigned" ,$summary) [ $issueLink ]
+#elseif($isResolved)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.completed" ,$summary) [ $issueLink ]
+#elseif($isStarted)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.workstarted" ,$summary) [ $issueLink ]
+#elseif($isStopped)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.workfinished" ,$summary) [ $issueLink ]
+#elseif($isWorklogget)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.worklogadded" ,$summary) [ $issueLink ]
+#elseif($isWorklogUpdated)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.worklogmodified" ,$summary) [ $issueLink ]
+#elseif($isWorklogDeleted)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.worklogdeleted" ,$summary) [ $issueLink ]
+#elseif($isGenericEvent)
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.customevent" ,$summary) [ $issueLink ]
+#else
+[$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.event" ,$summary) [ $issueLink ]
+#end
+#if(! $changes.isEmpty())
+
+#foreach($entry in $changes.entrySet())
+#if($velocityCount>1)${n}#end#if($!entry.value.contains(${n}))$i18n.getText($entry.key): ${n}$entry.value#else$i18n.getText($entry.key): $entry.value#end
+#end
+#if($comment)
+
+${n}$comment#end
+#else
+#if($comment)
+
+$comment#end#end

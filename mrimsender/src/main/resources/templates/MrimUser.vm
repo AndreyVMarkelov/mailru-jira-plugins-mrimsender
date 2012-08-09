@@ -1,0 +1,47 @@
+## Created by Andrey Markelov 29-08-2012.
+## Copyright Mail.Ru Group 2012. All rights reserved.
+<html>
+    <head>
+        <title>$i18n.getText("mrim.user.configuration.item")</title>
+        <meta name="decorator" content="atl.general"/>
+        $webResourceManager.requireResource("jira.webresources:global-static")
+        $webResourceManager.requireResource("jira.webresources:jira-global")
+        $webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+    </head>
+    <body class="aui">
+        #if ($okey == "true")
+        <div class="aui-message closeable shadowed">
+            <p class="title">
+                <span class="aui-icon icon-success"></span>
+                <strong>$i18n.getText("mrim.base.saved")</strong>
+            </p>
+        </div>
+        #end
+        #if ($error)
+            <div class="aui-message closeable shadowed">
+            <p class="title">
+                <span class="aui-icon icon-error"></span>
+                <strong>$i18n.getText($error)</strong>
+            </p>
+        </div>
+        #end
+        <h3 class="jiraformheader">$i18n.getText("mrim.user.configuration.header")</h3>
+        <form class="aui" id="mrimcfg" name="mrimcfg" action="$baseUrl/plugins/servlet/mrimsender/view" method="post">
+            <input type="hidden" name="atl_token" value="$atl_token"/>
+            <div class="field-group">
+                <label for="mrimLogin">$i18n.getText("mrim.admin.configuration.login")<span class="aui-icon icon-required"></label>
+                <input type="text" id="email" name="email" #if ($login) value="$login" #end/>
+            </div>
+            <div class="field-group">
+                 <input id="active" type="checkbox" name="active" #if ($status == "true") checked="yes" #end/>
+                 $i18n.getText("mrim.user.configuration.doactive")
+            </div>
+            <input type="hidden" name="action" value="saveuser"/>
+            <div class="buttons-container">
+                <div class="buttons">
+                    <input class="button submit" type="submit" value='$i18n.getText("mrim.user.configuration.save")'/>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

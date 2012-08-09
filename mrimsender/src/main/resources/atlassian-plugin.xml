@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    </plugin-info>
+
+    <web-item key="mrim-configuration" name="MRIM configuration link on administrators page" section="system.admin/globalsettings" weight="95">
+        <label key="mrim.admin.configuration.item"/>
+        <condition class="com.atlassian.jira.plugin.webfragment.conditions.JiraGlobalPermissionCondition">
+            <param name="permission">admin</param>
+        </condition>
+        <link linkId="mrim-configuration">/plugins/servlet/mrimsender/view?action=admin</link>
+    </web-item>
+
+    <web-item key="mrim-user-configuration" name="MRIM configuration link for user profile" section="system.user.options/personal" weight="95">
+        <label key="mrim.user.configuration.item"/>
+        <link linkId="mrim-configuration1">/plugins/servlet/mrimsender/view?action=user</link>
+    </web-item>
+
+    <component-import key="eventPublisher" interface="com.atlassian.event.api.EventPublisher"/>
+
+    <component key="mrimsender" class="ru.mail.jira.plugins.mrimsender.MRIMSender">
+        <description>This class processes JIRA events and sends them to MRIM.</description>
+    </component>   <resource type="i18n" name="i18n" location="atlassian-plugin"/>
+
+    <component key="mrimSettings" class="ru.mail.jira.plugins.mrimsender.MrimSettingsImpl">
+        <interface>ru.mail.jira.plugins.mrimsender.MrimSettings</interface>
+    </component>
+
+    <component-import key="mrimPluginSettings" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"/>
+    <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer"/>
+
+    <servlet key="mrim-configurer" class="ru.mail.jira.plugins.mrimsender.MrimConfigurer">
+        <url-pattern>/mrimsender/view</url-pattern>
+    </servlet>
+</atlassian-plugin>
