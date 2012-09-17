@@ -2,7 +2,7 @@
 ## Copyright Mail.Ru Group 2012. All rights reserved.
 #if($isCreated)
 [$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.created" ,$summary) [ $issueLink ]
-#if($!description != "") ${n}$description #end
+#if($description && $description != "") ${n}$description #end
 #elseif($isCommented)
 [$issueKey, $priority] $user: $i18n.getText("mrim.message.issue.commented" ,$summary) [ $issueLink ]
 #elseif($isReopened)

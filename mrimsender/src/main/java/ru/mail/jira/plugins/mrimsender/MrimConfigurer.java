@@ -21,6 +21,7 @@ import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.ComponentManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.xsrf.XsrfTokenGenerator;
+import com.atlassian.jira.user.UserPropertyManager;
 import com.atlassian.jira.user.util.UserUtil;
 import com.atlassian.templaterenderer.RenderingException;
 import com.atlassian.templaterenderer.TemplateRenderer;
@@ -69,16 +70,23 @@ public class MrimConfigurer
     private final UserUtil userUtil;
 
     /**
+     * User property manager.
+     */
+    private final UserPropertyManager userProps;
+
+    /**
      * Constructor.
      */
     public MrimConfigurer(
         TemplateRenderer renderer,
         MrimSettings mrimSettings,
-        UserUtil userUtil)
+        UserUtil userUtil,
+        UserPropertyManager userProps)
     {
         this.renderer = renderer;
         this.mrimSettings = mrimSettings;
         this.userUtil = userUtil;
+        this.userProps = userProps;
     }
 
     @Override
@@ -130,7 +138,9 @@ public class MrimConfigurer
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(
+        HttpServletRequest req,
+        HttpServletResponse resp)
     throws ServletException,
            IOException
     {
@@ -332,8 +342,8 @@ public class MrimConfigurer
             QueueSingleton.getInstance().put(dk);
         }
 
-        UserPropertyUtils.setUserMrimLogin(userUtil, user.getName(), login);
-        UserPropertyUtils.setUserMrimStatus(userUtil, user.getName(), doenable);
+        UserPropertyUtils.setUserMrimLogin(userUtil, userProps, user.getName(), login);
+        UserPropertyUtils.setUserMrimStatus(userUtil, userProps, user.getName(), doenable);
 
         String url = resp.encodeRedirectURL(getBaseUrl(req) + "/plugins/servlet/mrimsender/view?action=user&okey=true");
         resp.sendRedirect(url);
@@ -385,7 +395,7 @@ public class MrimConfigurer
             okey = "false";
         }
 
-        String email = UserPropertyUtils.getUserMrimLogin(userUtil, user.getName());
+        String email = UserPropertyUtils.getUserMrimLogin(userUtil, userProps, user.getName());
         if (email == null)
         {
             email = user.getEmailAddress();
@@ -397,7 +407,7 @@ public class MrimConfigurer
         Map<String, Object> parms = new HashMap<String, Object>();
         parms.put("baseUrl", getBaseUrl(req));
         parms.put("login", email);
-        parms.put("status", UserPropertyUtils.getUserMrimStatus(userUtil, user.getName()));
+        parms.put("status", UserPropertyUtils.getUserMrimStatus(userUtil, userProps, user.getName()));
         parms.put("okey", okey);
         parms.put("error", error);
         parms.put("atl_token", atl_token);

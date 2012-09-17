@@ -32,6 +32,7 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.comments.Comment;
 import com.atlassian.jira.security.PermissionManager;
 import com.atlassian.jira.security.Permissions;
+import com.atlassian.jira.user.UserPropertyManager;
 import com.atlassian.jira.user.util.UserUtil;
 
 /**
@@ -69,16 +70,23 @@ public class MRIMSender
     private SimpleDateFormat format;
 
     /**
+     * User property manager.
+     */
+    private final UserPropertyManager userProps;
+
+    /**
      * Constructor.
      */
     public MRIMSender(
         EventPublisher eventPublisher,
         MrimSettings mrimSettings,
-        UserUtil userUtil)
+        UserUtil userUtil,
+        UserPropertyManager userProps)
     {
         this.eventPublisher = eventPublisher;
         this.mrimSettings = mrimSettings;
         this.userUtil = userUtil;
+        this.userProps = userProps;
         this.format = new SimpleDateFormat("yyyy-MM-dd HH:mm"); 
     }
 
@@ -125,7 +133,6 @@ public class MRIMSender
         }
     }
 
-    @SuppressWarnings("unchecked")
     @EventListener
     public void onIssueEvent(IssueEvent issueEvent)
     {
@@ -257,11 +264,11 @@ public class MRIMSender
         else
         {
             parms.put("assignee", assignee.getDisplayName());
-            if (UserPropertyUtils.getUserMrimStatus(userUtil, assignee.getName()).equals("true") &&
+            if (UserPropertyUtils.getUserMrimStatus(userUtil, userProps, assignee.getName()).equals("true") &&
                 pm.hasPermission(Permissions.BROWSE, issue, assignee) &&
                 !assignee.equals(user))
             {
-                mailers.add(UserPropertyUtils.getUserMrimLogin(userUtil, assignee.getName()));
+                mailers.add(UserPropertyUtils.getUserMrimLogin(userUtil, userProps, assignee.getName()));
             }
         }
 
@@ -273,11 +280,11 @@ public class MRIMSender
         else
         {
             parms.put("reporter", reporter.getDisplayName());
-            if (UserPropertyUtils.getUserMrimStatus(userUtil, reporter.getName()).equals("true") &&
+            if (UserPropertyUtils.getUserMrimStatus(userUtil, userProps, reporter.getName()).equals("true") &&
                 pm.hasPermission(Permissions.BROWSE, issue, reporter) &&
                 !reporter.equals(user))
             {
-                mailers.add(UserPropertyUtils.getUserMrimLogin(userUtil, reporter.getName()));
+                mailers.add(UserPropertyUtils.getUserMrimLogin(userUtil, userProps, reporter.getName()));
             }
         }
 
@@ -286,11 +293,11 @@ public class MRIMSender
         {
             for (String watcher : watchers)
             {
-                if (UserPropertyUtils.getUserMrimStatus(userUtil, watcher).equals("true") &&
+                if (UserPropertyUtils.getUserMrimStatus(userUtil, userProps, watcher).equals("true") &&
                     pm.hasPermission(Permissions.BROWSE, issue, userUtil.getUserObject(watcher)) &&
                     !userUtil.getUserObject(watcher).equals(user))
                 {
-                    mailers.add(UserPropertyUtils.getUserMrimLogin(userUtil, watcher));
+                    mailers.add(UserPropertyUtils.getUserMrimLogin(userUtil, userProps, watcher));
                 }
             }
         }
