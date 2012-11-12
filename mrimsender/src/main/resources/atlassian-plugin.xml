@@ -5,6 +5,10 @@
         <description>${project.description}</description>
         <version>${project.version}</version>
         <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <param name="plugin-logo">/images/agent.png</param>
+        <param name="plugin-icon">/images/agent.png</param>
+        <param name="vendor-icon">/images/icon.png</param>
+        <param name="vendor-logo">/images/logo.png</param>
     </plugin-info>
 
     <web-section key="mailru-admin-section_old" name="Link New Issue Operation - Configuration" location="system.admin" weight="20">

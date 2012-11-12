@@ -38,7 +38,7 @@ public class QueueSingleton
      */
     private QueueSingleton()
     {
-        queue = new LinkedBlockingDeque<DataKeeper>(100);
+        queue = new LinkedBlockingDeque<DataKeeper>();
     }
 
     /**
@@ -47,7 +47,7 @@ public class QueueSingleton
     public DataKeeper poll()
     throws InterruptedException
     {
-        return queue.poll(5, TimeUnit.SECONDS);
+        return queue.poll(2, TimeUnit.SECONDS);
     }
 
     /**

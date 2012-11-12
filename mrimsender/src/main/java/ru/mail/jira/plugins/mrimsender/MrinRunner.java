@@ -205,7 +205,7 @@ public class MrinRunner
                     }
                     else
                     {
-                        ms.sleep(1000);
+                        ms.sleep(500);
                     }
                     ms.write(dk.getData());
                 }
